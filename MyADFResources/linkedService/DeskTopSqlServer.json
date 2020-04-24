@@ -1,0 +1,16 @@
+{
+	"name": "DeskTopSqlServer",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=False;data source=DESKTOP-TNGBMM9;initial catalog=Test;user id=twatta",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI4MWIyNzZhYy1jNjc4LTQ1ZDAtYTMzZC1hNGEwZGUyMGQyNjciLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "DeskTopIntegrationRunTime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

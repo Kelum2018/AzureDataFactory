@@ -1,0 +1,29 @@
+{
+	"name": "AzureBlobTestFile",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageDemo2019",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "HelloWorldDataSets"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "Archive/@{formatDateTime(utcnow(),'yyyy')}/@{formatDateTime(utcnow(),'MM')}/@{formatDateTime(utcnow(),'dd')}",
+					"type": "Expression"
+				},
+				"container": "sample"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

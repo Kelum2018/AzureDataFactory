@@ -1,0 +1,37 @@
+{
+	"name": "SqlServerTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DeskTopSqlServer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ADFTestDataDataSets"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "Id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Date",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "Count",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ADFTestData"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

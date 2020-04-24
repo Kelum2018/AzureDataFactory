@@ -1,0 +1,6 @@
+{
+	"name": "DeskTopIntegrationRunTime",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
