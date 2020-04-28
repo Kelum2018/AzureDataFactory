@@ -5,12 +5,14 @@
 			"referenceName": "AzureBlobStorageDemo2019",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "Lego_HTTP_to_ADSL_Themes"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "ModifiedLogo.csv",
 				"folderPath": "Logo",
 				"container": "sample"
 			},
