@@ -1,0 +1,37 @@
+{
+	"name": "LogoModifiedTestData",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageDemo2019",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "ModifiedLogo.csv",
+				"folderPath": "Logo",
+				"container": "sample"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "name",
+				"type": "String"
+			},
+			{
+				"name": "parent_id",
+				"type": "String"
+			}
+		]
+	}
+}
