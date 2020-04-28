@@ -26,7 +26,7 @@
 					"name": "AddLoadDate"
 				}
 			],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100) ~> demostorage2019Logo\ndemostorage2019Logo derive(load_date = currentDate()) ~> AddLoadDate\nAddLoadDate sink(input(\n\t\tid as string,\n\t\tname as string,\n\t\tparent_id as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> demostorage2019Logo\ndemostorage2019Logo derive(load_date = currentDate()) ~> AddLoadDate\nAddLoadDate sink(input(\n\t\tid as string,\n\t\tname as string,\n\t\tparent_id as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 		}
 	}
 }
