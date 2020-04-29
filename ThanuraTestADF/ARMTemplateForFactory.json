@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'DeskTopSqlServer'"
 		},
+		"kelumazuresql_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'kelumazuresql'"
+		},
 		"Http_Logs_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://cdn.rebrickable.com/media/downloads/"
@@ -207,6 +211,147 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/Lego_HTTP_to_ADLS_Themes')]",
 				"[concat(variables('factoryId'), '/pipelines/Generate_LegoFile_UsingModifiedData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TestActivityDependencies')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CheckDivideByZero",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spDivideByZero]"
+						},
+						"linkedServiceName": {
+							"referenceName": "kelumazuresql",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Success",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "CheckDivideByZero",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[ADFPipeExecutionStatusSucessful]"
+						},
+						"linkedServiceName": {
+							"referenceName": "kelumazuresql",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Faliure",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "CheckDivideByZero",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[ADFPipeExecutionStatusFailure]"
+						},
+						"linkedServiceName": {
+							"referenceName": "kelumazuresql",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Completion",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "CheckDivideByZero",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[ADFPipeExecutionStatusCompletion]"
+						},
+						"linkedServiceName": {
+							"referenceName": "kelumazuresql",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "CompletionSuccess",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Completion",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[ADFPipeExecutionStatusSucessful]"
+						},
+						"linkedServiceName": {
+							"referenceName": "kelumazuresql",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/kelumazuresql')]"
 			]
 		},
 		{
@@ -800,6 +945,19 @@
 					"url": "[parameters('Http_Logs_properties_typeProperties_url')]",
 					"enableServerCertificateValidation": true,
 					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/kelumazuresql')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('kelumazuresql_connectionString')]"
 				}
 			},
 			"dependsOn": []

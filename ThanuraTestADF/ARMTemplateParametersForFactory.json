@@ -11,6 +11,9 @@
 		"DeskTopSqlServer_connectionString": {
 			"value": ""
 		},
+		"kelumazuresql_connectionString": {
+			"value": ""
+		},
 		"Http_Logs_properties_typeProperties_url": {
 			"value": "https://cdn.rebrickable.com/media/downloads/"
 		}

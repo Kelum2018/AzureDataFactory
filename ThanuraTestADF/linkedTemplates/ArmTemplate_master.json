@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'DeskTopSqlServer'"
 		},
+		"kelumazuresql_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'kelumazuresql'"
+		},
 		"Http_Logs_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://cdn.rebrickable.com/media/downloads/"
@@ -49,6 +53,9 @@
 					"AzureBlobStorageDemo2019_connectionString": {
 						"value": "[parameters('AzureBlobStorageDemo2019_connectionString')]"
 					},
+					"kelumazuresql_connectionString": {
+						"value": "[parameters('kelumazuresql_connectionString')]"
+					},
 					"DeskTopSqlServer_connectionString": {
 						"value": "[parameters('DeskTopSqlServer_connectionString')]"
 					},
@@ -58,6 +65,26 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ArmTemplate_0')]"
+			]
 		}
 	]
 }
