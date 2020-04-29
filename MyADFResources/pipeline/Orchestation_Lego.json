@@ -1,0 +1,44 @@
+{
+	"name": "Orchestation_Lego",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lego_HTTP_to_ADSL_themes",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Lego_HTTP_to_ADLS_Themes",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Generate_LegoFiles_UsingModifiedDate",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Lego_HTTP_to_ADSL_themes",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Generate_LegoFile_UsingModifiedData",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "pack_LegoDataTransfer"
+		},
+		"annotations": []
+	}
+}

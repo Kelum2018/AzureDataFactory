@@ -26,6 +26,9 @@
 				}
 			}
 		],
+		"folder": {
+			"name": "pack_LegoDataTransfer"
+		},
 		"annotations": []
 	}
 }
