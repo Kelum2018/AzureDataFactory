@@ -237,6 +237,50 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LogoModifiedTestData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorageDemo2019",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Lego_HTTP_to_ADSL_Themes"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "Logo",
+						"container": "sample"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "id",
+						"type": "String"
+					},
+					{
+						"name": "name",
+						"type": "String"
+					},
+					{
+						"name": "parent_id",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageDemo2019')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/SourceDataset_e3p')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -299,50 +343,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/DeskTopIntegrationRunTime')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LogoModifiedTestData')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureBlobStorageDemo2019",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Lego_HTTP_to_ADSL_Themes"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"folderPath": "Logo",
-						"container": "sample"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "id",
-						"type": "String"
-					},
-					{
-						"name": "name",
-						"type": "String"
-					},
-					{
-						"name": "parent_id",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageDemo2019')]"
 			]
 		},
 		{
@@ -422,6 +422,9 @@
 						]
 					}
 				],
+				"folder": {
+					"name": "pack_LegoDataTransfer"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -589,44 +592,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Modified_Logo_Data')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "DestinationDataset_e3p",
-								"type": "DatasetReference"
-							},
-							"name": "demostorage2019Logo"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "LogoModifiedTestData",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "AddLoadDate"
-						}
-					],
-					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> demostorage2019Logo\ndemostorage2019Logo derive(load_date = currentDate()) ~> AddLoadDate\nAddLoadDate sink(input(\n\t\tid as string,\n\t\tname as string,\n\t\tparent_id as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DestinationDataset_e3p')]",
-				"[concat(variables('factoryId'), '/datasets/LogoModifiedTestData')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/SqlServer_TestDB_LogoTestData')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -665,6 +630,89 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/DeskTopSqlServer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Modified_Logo_Data')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DestinationDataset_e3p",
+								"type": "DatasetReference"
+							},
+							"name": "demostorage2019Logo"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "LogoModifiedTestData",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "AddLoadDate"
+						}
+					],
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> demostorage2019Logo\ndemostorage2019Logo derive(load_date = currentDate()) ~> AddLoadDate\nAddLoadDate sink(input(\n\t\tid as string,\n\t\tname as string,\n\t\tparent_id as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_e3p')]",
+				"[concat(variables('factoryId'), '/datasets/LogoModifiedTestData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Generate_LegoFile_UsingModifiedData')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Modified_Logo_Data",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Modified_Logo_Data",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"demostorage2019Logo": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							}
+						}
+					}
+				],
+				"folder": {
+					"name": "pack_LegoDataTransfer"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Modified_Logo_Data')]"
 			]
 		},
 		{
@@ -753,45 +801,55 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Generate_LegoFile_UsingModifiedData')]",
+			"name": "[concat(parameters('factoryName'), '/Orchestation_Lego')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Modified_Logo_Data",
-						"type": "ExecuteDataFlow",
+						"name": "Lego_HTTP_to_ADSL_themes",
+						"type": "ExecutePipeline",
 						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
 						"userProperties": [],
 						"typeProperties": {
-							"dataflow": {
-								"referenceName": "Modified_Logo_Data",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"demostorage2019Logo": {},
-									"sink1": {}
-								}
+							"pipeline": {
+								"referenceName": "Lego_HTTP_to_ADLS_Themes",
+								"type": "PipelineReference"
 							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "Generate_LegoFiles_UsingModifiedDate",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Lego_HTTP_to_ADSL_themes",
+								"dependencyConditions": [
+									"Succeeded"
+								]
 							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Generate_LegoFile_UsingModifiedData",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
 						}
 					}
 				],
+				"folder": {
+					"name": "pack_LegoDataTransfer"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/Modified_Logo_Data')]"
+				"[concat(variables('factoryId'), '/pipelines/Lego_HTTP_to_ADLS_Themes')]",
+				"[concat(variables('factoryId'), '/pipelines/Generate_LegoFile_UsingModifiedData')]"
 			]
 		}
 	]
