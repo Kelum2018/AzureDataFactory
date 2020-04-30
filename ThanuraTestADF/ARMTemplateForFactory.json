@@ -23,7 +23,7 @@
 			"type": "string",
 			"defaultValue": "https://cdn.rebrickable.com/media/downloads/"
 		},
-		"trigger1_properties_typeProperties_scope": {
+		"AzureTestBlobTrigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/2ab4b8b0-bc5a-41f2-bc55-cc30d35a1af4/resourceGroups/demostorageacc2019/providers/Microsoft.Storage/storageAccounts/demostorage2019"
 		}
@@ -967,6 +967,37 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureTestBlobTrigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "TransferADFTestDataToSQLDB",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/sample/blobs/Test Data/Jan/01",
+					"blobPathEndsWith": ".csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('AzureTestBlobTrigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/TransferADFTestDataToSQLDB')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ScheduleTrigger')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -1033,37 +1064,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DestinationDataset_e3p')]",
 				"[concat(variables('factoryId'), '/datasets/LogoModifiedTestData')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/trigger1')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "TransferADFTestDataToSQLDB",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/sample/blobs/Test Data\\Jan\\01",
-					"blobPathEndsWith": ".csv",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('trigger1_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/TransferADFTestDataToSQLDB')]"
 			]
 		}
 	]

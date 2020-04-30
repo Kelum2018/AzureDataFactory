@@ -17,7 +17,7 @@
 		"Http_Logs_properties_typeProperties_url": {
 			"value": "https://cdn.rebrickable.com/media/downloads/"
 		},
-		"trigger1_properties_typeProperties_scope": {
+		"AzureTestBlobTrigger_properties_typeProperties_scope": {
 			"value": "/subscriptions/2ab4b8b0-bc5a-41f2-bc55-cc30d35a1af4/resourceGroups/demostorageacc2019/providers/Microsoft.Storage/storageAccounts/demostorage2019"
 		},
 		"containerUri": {

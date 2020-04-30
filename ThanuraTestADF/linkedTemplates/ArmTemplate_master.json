@@ -23,7 +23,7 @@
 			"type": "string",
 			"defaultValue": "https://cdn.rebrickable.com/media/downloads/"
 		},
-		"trigger1_properties_typeProperties_scope": {
+		"AzureTestBlobTrigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/2ab4b8b0-bc5a-41f2-bc55-cc30d35a1af4/resourceGroups/demostorageacc2019/providers/Microsoft.Storage/storageAccounts/demostorage2019"
 		},
@@ -84,8 +84,8 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"trigger1_properties_typeProperties_scope": {
-						"value": "[parameters('trigger1_properties_typeProperties_scope')]"
+					"AzureTestBlobTrigger_properties_typeProperties_scope": {
+						"value": "[parameters('AzureTestBlobTrigger_properties_typeProperties_scope')]"
 					}
 				}
 			},
