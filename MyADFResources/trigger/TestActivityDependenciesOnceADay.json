@@ -1,0 +1,17 @@
+{
+	"name": "TestActivityDependenciesOnceADay",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 1,
+				"startTime": "2020-04-30T11:36:00.000Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
