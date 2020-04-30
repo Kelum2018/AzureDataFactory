@@ -22,6 +22,10 @@
 		"Http_Logs_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://cdn.rebrickable.com/media/downloads/"
+		},
+		"trigger1_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/2ab4b8b0-bc5a-41f2-bc55-cc30d35a1af4/resourceGroups/demostorageacc2019/providers/Microsoft.Storage/storageAccounts/demostorage2019"
 		}
 	},
 	"variables": {
@@ -963,6 +967,27 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ScheduleTrigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 1,
+						"startTime": "2020-04-30T10:42:00.000Z",
+						"endTime": "2020-05-01T10:42:00.000Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DeskTopIntegrationRunTime')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -1011,25 +1036,35 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ScheduleTrigger')]",
+			"name": "[concat(parameters('factoryName'), '/trigger1')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Minute",
-						"interval": 1,
-						"startTime": "2020-04-30T10:42:00.000Z",
-						"endTime": "2020-05-01T10:42:00.000Z",
-						"timeZone": "UTC"
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "TransferADFTestDataToSQLDB",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
 					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/sample/blobs/Test Data\\Jan\\01",
+					"blobPathEndsWith": ".csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('trigger1_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/TransferADFTestDataToSQLDB')]"
+			]
 		}
 	]
 }
