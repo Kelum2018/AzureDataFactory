@@ -13,7 +13,16 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": [],
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "sample/Test Data/Jan/"
+					},
+					{
+						"name": "Destination",
+						"value": "dbo.ADFTestData"
+					}
+				],
 				"typeProperties": {
 					"source": {
 						"type": "DelimitedTextSource",
@@ -72,7 +81,9 @@
 				]
 			}
 		],
-		"annotations": []
+		"annotations": [
+			"Copy Data"
+		]
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }
