@@ -37,7 +37,8 @@
 						}
 					},
 					"sink": {
-						"type": "SqlServerSink"
+						"type": "SqlServerSink",
+						"preCopyScript": "Truncate table [Test].[dbo].[ADFTestData]"
 					},
 					"enableStaging": false,
 					"dataIntegrationUnits": 2,
