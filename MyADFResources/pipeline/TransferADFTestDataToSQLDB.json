@@ -47,7 +47,9 @@
 							{
 								"source": {
 									"name": "Date",
-									"type": "String"
+									"type": "String",
+									"format": "MM/dd/YYYY",
+									"culture": "en-UK"
 								},
 								"sink": {
 									"name": "Date",
