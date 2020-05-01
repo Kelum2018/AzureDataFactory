@@ -33,7 +33,16 @@
 							"secureOutput": false,
 							"secureInput": false
 						},
-						"userProperties": [],
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "sample/Test Data/Jan/"
+							},
+							{
+								"name": "Destination",
+								"value": "dbo.ADFTestData"
+							}
+						],
 						"typeProperties": {
 							"source": {
 								"type": "DelimitedTextSource",
@@ -58,7 +67,9 @@
 									{
 										"source": {
 											"name": "Date",
-											"type": "String"
+											"type": "String",
+											"format": "MM/dd/YYYY",
+											"culture": "en-UK"
 										},
 										"sink": {
 											"name": "Date",
@@ -94,7 +105,9 @@
 						]
 					}
 				],
-				"annotations": []
+				"annotations": [
+					"Copy Data"
+				]
 			},
 			"dependsOn": []
 		},
