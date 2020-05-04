@@ -399,7 +399,10 @@
 								}
 							},
 							"sink": {
-								"type": "SqlServerSink"
+								"type": "SqlServerSink",
+								"sqlWriterStoredProcedureName": "[[stg].[LoadADFTestDataFromBlob]",
+								"sqlWriterTableType": "stg.ADFTestData",
+								"storedProcedureTableTypeParameterName": "ADFDataType"
 							},
 							"enableStaging": false,
 							"dataIntegrationUnits": 2,
@@ -409,13 +412,11 @@
 									{
 										"source": {
 											"name": "Date",
-											"type": "String",
-											"format": "MM/dd/YYYY",
-											"culture": "en-UK"
+											"type": "String"
 										},
 										"sink": {
 											"name": "Date",
-											"type": "DateTime"
+											"type": "String"
 										}
 									},
 									{
@@ -425,7 +426,7 @@
 										},
 										"sink": {
 											"name": "Count",
-											"type": "Int32"
+											"type": "String"
 										}
 									}
 								]
