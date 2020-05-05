@@ -16,7 +16,7 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "sample/Test Data/Jan/"
+						"value": "sample/Test Data/Jan/01/@{pipeline().parameters.pipeFileName}.csv"
 					},
 					{
 						"name": "Destination",
@@ -29,7 +29,6 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
-							"wildcardFileName": "*.csv",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -73,7 +72,13 @@
 				"inputs": [
 					{
 						"referenceName": "DelimitedText1",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"fileName": {
+								"value": "@pipeline().parameters.pipeFileName",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
@@ -84,6 +89,12 @@
 				]
 			}
 		],
+		"parameters": {
+			"pipeFileName": {
+				"type": "String",
+				"defaultValue": "01.csv"
+			}
+		},
 		"annotations": [
 			"Copy Data"
 		]

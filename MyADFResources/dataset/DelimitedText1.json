@@ -5,6 +5,11 @@
 			"referenceName": "AzureBlobStorageDemo2019",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"fileName": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "ADFTestDataDataSets"
 		},
@@ -13,7 +18,11 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "Test Data/Jan",
+				"fileName": {
+					"value": "@dataset().fileName",
+					"type": "Expression"
+				},
+				"folderPath": "Test Data/Jan/01",
 				"container": "sample"
 			},
 			"columnDelimiter": ",",
