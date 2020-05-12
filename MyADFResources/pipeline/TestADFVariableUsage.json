@@ -111,6 +111,15 @@
 								"secureInput": false
 							},
 							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[stg].[LoadLogoTestData]",
+								"storedProcedureParameters": {
+									"filename": {
+										"value": "",
+										"type": "String"
+									}
+								}
+							},
 							"linkedServiceName": {
 								"referenceName": "DeskTopSqlServer",
 								"type": "LinkedServiceReference"
