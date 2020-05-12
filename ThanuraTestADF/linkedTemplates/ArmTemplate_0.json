@@ -534,6 +534,50 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LegoConfigDataSet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorageDemo2019",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Lego_HTTP_to_ADSL_Themes"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "LegoConfigfile.csv",
+						"folderPath": "Logo",
+						"container": "sample"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageDemo2019')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Lego_HTTP_to_ADLS_Themes')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -970,44 +1014,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/DeskTopSqlServer')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Modified_Logo_Data')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "DestinationDataset_e3p",
-								"type": "DatasetReference"
-							},
-							"name": "demostorage2019Logo"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "LogoModifiedTestData",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "AddLoadDate"
-						}
-					],
-					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> demostorage2019Logo\ndemostorage2019Logo derive(load_date = currentDate()) ~> AddLoadDate\nAddLoadDate sink(input(\n\t\tid as string,\n\t\tname as string,\n\t\tparent_id as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DestinationDataset_e3p')]",
-				"[concat(variables('factoryId'), '/datasets/LogoModifiedTestData')]"
 			]
 		}
 	]
