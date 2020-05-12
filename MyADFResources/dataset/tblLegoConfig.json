@@ -1,0 +1,36 @@
+{
+	"name": "tblLegoConfig",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DeskTopSqlServer",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Lego_HTTP_to_ADSL_Themes"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "SourceSystem",
+				"type": "varchar"
+			},
+			{
+				"name": "SourceFileName",
+				"type": "varchar"
+			},
+			{
+				"name": "SourceFileExtension",
+				"type": "varchar"
+			},
+			{
+				"name": "IsActive",
+				"type": "bit"
+			}
+		],
+		"typeProperties": {
+			"schema": "etl",
+			"table": "ConfigurationTable"
+		}
+	}
+}
