@@ -115,7 +115,10 @@
 								"storedProcedureName": "[stg].[LoadLogoTestData]",
 								"storedProcedureParameters": {
 									"filename": {
-										"value": "",
+										"value": {
+											"value": "@item()",
+											"type": "Expression"
+										},
 										"type": "String"
 									}
 								}
