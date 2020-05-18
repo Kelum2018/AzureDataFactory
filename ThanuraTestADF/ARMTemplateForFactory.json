@@ -336,7 +336,10 @@
 										"storedProcedureName": "[[stg].[LoadLogoTestData]",
 										"storedProcedureParameters": {
 											"filename": {
-												"value": "",
+												"value": {
+													"value": "@item()",
+													"type": "Expression"
+												},
 												"type": "String"
 											}
 										}
@@ -737,6 +740,128 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/TransferLegoConfigData')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "LegoConfigDataSet",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Lookup2",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "SELECT * FROM [Test].[etl].[ConfigurationTable] WHERE IsActive=1",
+								"queryTimeout": "02:00:00"
+							},
+							"dataset": {
+								"referenceName": "tblLegoConfig",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": true
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup1').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Stored procedure1",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[stg].[LoadLogoTestData]",
+										"storedProcedureParameters": {
+											"filename": {
+												"value": {
+													"value": "@item().SourceFileName",
+													"type": "Expression"
+												},
+												"type": "String"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "DeskTopSqlServer",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/LegoConfigDataSet')]",
+				"[concat(variables('factoryId'), '/datasets/tblLegoConfig')]",
+				"[concat(variables('factoryId'), '/linkedServices/DeskTopSqlServer')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureBlobTestFile')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -919,6 +1044,51 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LegoConfigDataSet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorageDemo2019",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Lego_HTTP_to_ADSL_Themes"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "LegoConfigfile.csv",
+						"folderPath": "Logo",
+						"container": "sample"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageDemo2019')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LogoModifiedTestData')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1091,6 +1261,47 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/tblLegoConfig')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DeskTopSqlServer",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Lego_HTTP_to_ADSL_Themes"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "SourceSystem",
+						"type": "varchar"
+					},
+					{
+						"name": "SourceFileName",
+						"type": "varchar"
+					},
+					{
+						"name": "SourceFileExtension",
+						"type": "varchar"
+					},
+					{
+						"name": "IsActive",
+						"type": "bit"
+					}
+				],
+				"typeProperties": {
+					"schema": "etl",
+					"table": "ConfigurationTable"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DeskTopSqlServer')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureBlobStorageDemo2019')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -1249,161 +1460,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DestinationDataset_e3p')]",
 				"[concat(variables('factoryId'), '/datasets/LogoModifiedTestData')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LegoConfigDataSet')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureBlobStorageDemo2019",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Lego_HTTP_to_ADSL_Themes"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "LegoConfigfile.csv",
-						"folderPath": "Logo",
-						"container": "sample"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageDemo2019')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TransferLegoConfigData')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Lookup1",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"dataset": {
-								"referenceName": "LegoConfigDataSet",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "Lookup2",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"queryTimeout": "02:00:00"
-							},
-							"dataset": {
-								"referenceName": "tblLegoConfig",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"firstRowOnly": false
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/LegoConfigDataSet')]",
-				"[concat(variables('factoryId'), '/datasets/tblLegoConfig')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tblLegoConfig')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "DeskTopSqlServer",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Lego_HTTP_to_ADSL_Themes"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "SourceSystem",
-						"type": "varchar"
-					},
-					{
-						"name": "SourceFileName",
-						"type": "varchar"
-					},
-					{
-						"name": "SourceFileExtension",
-						"type": "varchar"
-					},
-					{
-						"name": "IsActive",
-						"type": "bit"
-					}
-				],
-				"typeProperties": {
-					"schema": "etl",
-					"table": "ConfigurationTable"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/DeskTopSqlServer')]"
 			]
 		}
 	]

@@ -425,6 +425,51 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LegoConfigDataSet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorageDemo2019",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Lego_HTTP_to_ADSL_Themes"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "LegoConfigfile.csv",
+						"folderPath": "Logo",
+						"container": "sample"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageDemo2019')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LogoModifiedTestData')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -531,50 +576,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/DeskTopIntegrationRunTime')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LegoConfigDataSet')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureBlobStorageDemo2019",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "Lego_HTTP_to_ADSL_Themes"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "LegoConfigfile.csv",
-						"folderPath": "Logo",
-						"container": "sample"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageDemo2019')]"
 			]
 		},
 		{
@@ -784,7 +785,10 @@
 										"storedProcedureName": "[[stg].[LoadLogoTestData]",
 										"storedProcedureParameters": {
 											"filename": {
-												"value": "",
+												"value": {
+													"value": "@item()",
+													"type": "Expression"
+												},
 												"type": "String"
 											}
 										}
