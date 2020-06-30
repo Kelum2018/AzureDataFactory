@@ -1,0 +1,35 @@
+{
+	"name": "Transform_CPG_Data",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CPGData",
+						"type": "DatasetReference"
+					},
+					"name": "SourceCPG"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText2",
+						"type": "DatasetReference"
+					},
+					"name": "OutputCPGDataSet"
+				}
+			],
+			"transformations": [
+				{
+					"name": "AddSourceProductNo"
+				},
+				{
+					"name": "AddSuurogateKey"
+				}
+			],
+			"script": "source(output(\n\t\t{Order ID} as string,\n\t\t{Product ID} as string,\n\t\t{Location ID} as string,\n\t\t{Sales Person ID} as string,\n\t\t{Customer ID} as string,\n\t\t{Purchase Date} as string,\n\t\tQuantity as string,\n\t\tPrice as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> SourceCPG\nSourceCPG derive(SourceProductID = toInteger(substring({Product ID},4,length({Product ID}))),\n\t\tYear = toInteger(right({Purchase Date},4))) ~> AddSourceProductNo\nAddSourceProductNo keyGenerate(output(Product_SK as long),\n\tstartAt: 1L) ~> AddSuurogateKey\nAddSuurogateKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['OutPutCPG'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> OutputCPGDataSet"
+		}
+	}
+}
