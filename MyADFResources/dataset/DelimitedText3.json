@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "HR_Jan2020.csv",
+				"fileName": "*.csv",
 				"folderPath": "SchemaDrift/Source",
 				"container": "sample"
 			},
