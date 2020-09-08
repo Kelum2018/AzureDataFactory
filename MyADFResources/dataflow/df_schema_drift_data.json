@@ -22,7 +22,7 @@
 				}
 			],
 			"transformations": [],
-			"script": "source(output(\n\t\tId as short,\n\t\t{ Name} as string,\n\t\t{ Salary} as integer\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> schemasource\nschemasource sink(input(\n\t\tId as string,\n\t\t{ Name} as string,\n\t\t{ Salary} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['row_salary_data'],\n\tmapColumn(\n\t\tId,\n\t\t{ Name},\n\t\t{ Salary}\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+			"script": "source(output(\n\t\tId as string,\n\t\t{ Name} as string,\n\t\t{ Salary} as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> schemasource\nschemasource sink(input(\n\t\tId as string,\n\t\t{ Name} as string,\n\t\t{ Salary} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['row_salary_data'],\n\tmapColumn(\n\t\tId,\n\t\t{ Name},\n\t\t{ Salary}\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 		}
 	}
 }
