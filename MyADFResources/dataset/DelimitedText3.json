@@ -1,5 +1,5 @@
 {
-	"name": "SchemaDriftSource",
+	"name": "DelimitedText3",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorageDemo2019",
@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "HR_Jan2020.csv",
-				"folderPath": "SchemaDrift/Source",
+				"folderPath": "SchemaDrift/Bronze",
 				"container": "sample"
 			},
 			"columnDelimiter": ",",
@@ -21,12 +20,15 @@
 		},
 		"schema": [
 			{
+				"name": "Id",
 				"type": "String"
 			},
 			{
+				"name": " Name",
 				"type": "String"
 			},
 			{
+				"name": " Salary",
 				"type": "String"
 			}
 		]
