@@ -1,5 +1,5 @@
 {
-	"name": "SchemaDriftSource",
+	"name": "ds_transfer_file_using_dataflow_sink",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorageDemo2019",
@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "HR_Jan2020.csv",
-				"folderPath": "SchemaDrift/Source",
+				"folderPath": "SchemaDrift/Completed",
 				"container": "sample"
 			},
 			"columnDelimiter": ",",
@@ -19,6 +18,19 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "Id",
+				"type": "String"
+			},
+			{
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "Dept",
+				"type": "String"
+			}
+		]
 	}
 }

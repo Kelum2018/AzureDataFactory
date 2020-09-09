@@ -9,20 +9,20 @@
 						"referenceName": "SchemaDriftSource",
 						"type": "DatasetReference"
 					},
-					"name": "schemasource"
+					"name": "source1"
 				}
 			],
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "DelimitedText2",
+						"referenceName": "DelimitedText3",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
 				}
 			],
 			"transformations": [],
-			"script": "source(output(\n\t\tId as string,\n\t\t{ Name} as string,\n\t\t{ Dept} as string,\n\t\t{ Salary} as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> schemasource\nschemasource sink(input(\n\t\tId as string,\n\t\t{ Name} as string,\n\t\t{ Dept} as string,\n\t\t{ Salary} as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\tpartitionFileNames:['new_file'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+			"script": "source(output(\n\t\tId as string,\n\t\t{ Name} as string,\n\t\t{ Dept} as string,\n\t\t{ Sala} as string,\n\t\t{ Date} as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\twildcardPaths:['SchemaDrift/Source/*.csv']) ~> source1\nsource1 sink(input(\n\t\tId as string,\n\t\t{ Name} as string,\n\t\t{ Salary} as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\tpartitionFileNames:['SchemaDriftOuput'],\n\ttruncate: true,\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 		}
 	}
 }

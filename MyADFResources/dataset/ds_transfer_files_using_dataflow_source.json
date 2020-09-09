@@ -1,5 +1,5 @@
 {
-	"name": "SchemaDriftSource",
+	"name": "ds_transfer_files_using_dataflow_source",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorageDemo2019",
@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "HR_Jan2020.csv",
 				"folderPath": "SchemaDrift/Source",
 				"container": "sample"
 			},

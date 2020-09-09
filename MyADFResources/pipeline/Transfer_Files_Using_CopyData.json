@@ -1,41 +1,11 @@
 {
-	"name": "TransferSchemaDriftData",
+	"name": "Transfer_Files_Using_CopyData",
 	"properties": {
 		"activities": [
 			{
-				"name": "df_schema_drift_data",
-				"type": "ExecuteDataFlow",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"dataflow": {
-						"referenceName": "df_schema_drift_data",
-						"type": "DataFlowReference"
-					},
-					"compute": {
-						"coreCount": 8,
-						"computeType": "General"
-					}
-				}
-			},
-			{
-				"name": "Copy data1",
+				"name": "Move_Files",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "df_schema_drift_data",
-						"dependencyConditions": [
-							"Failed"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -49,7 +19,9 @@
 						"type": "DelimitedTextSource",
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
-							"recursive": true
+							"recursive": true,
+							"wildcardFolderPath": "SchemaDrift/Source",
+							"wildcardFileName": "*.csv"
 						},
 						"formatSettings": {
 							"type": "DelimitedTextReadSettings"
@@ -84,7 +56,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "BadSchemaDataset",
+						"referenceName": "dt_schemadrift_completed",
 						"type": "DatasetReference"
 					}
 				]

@@ -1,0 +1,28 @@
+{
+	"name": "df_transfer_files_using_dataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_transfer_files_using_dataflow_source",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_transfer_file_using_dataflow_sink",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [],
+			"script": "source(output(\n\t\tId as string,\n\t\t{ Name} as string,\n\t\t{ salary} as string,\n\t\t{ Date} as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\twildcardPaths:['SchemaDrift/Source/*.csv']) ~> source1\nsource1 sink(input(\n\t\tId as string,\n\t\tName as string,\n\t\tDept as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\tfilePattern:(concat(\"file_\", toString(currentDate() ))),\n\ttruncate: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}
